@@ -18,7 +18,6 @@ class Follower(Base):
 
     user = relationship("User", back_populates = "follower")
 
-
 class User(Base):
     __tablename__ = 'user'
     # Here we define columns for the table address.
