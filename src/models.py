@@ -16,7 +16,7 @@ class Follower(Base):
     user_from_id = Column(Integer, ForeignKey('user.id'))
     user_to_id = Column(Integer, ForeignKey('user.id'))
 
-    user_follower = relationship("User", back_populates = "follower_user")
+    user = relationship("User", back_populates = "follower")
 
 class User(Base):
     __tablename__ = 'user'
@@ -28,9 +28,9 @@ class User(Base):
     lastname = Column(String, nullable=True)
     email = Column(String, nullable=False, unique=True)
 
-    follower_user = relationship("Follower", back_populates = "user_follower")
-    post_user = relationship("Post", back_populates = "user_post")
-    comment_user = relationship("Comment", back_populates = "user_comment")
+    follower = relationship("Follower", back_populates = "user")
+    post = relationship("Post", back_populates = "user")
+    comment = relationship("Comment", back_populates = "user")
 
 
     def to_dict(self):
@@ -45,7 +45,7 @@ class Media(Base):
     url = Column(String, nullable=False)
     post_id = Column(Integer, ForeignKey('post.id'))
 
-    post_media = relationship("Post", back_populates = "media_post")
+    post = relationship("Post", back_populates = "media")
 
 class Post(Base):
     __tablename__ = 'post'
@@ -54,9 +54,9 @@ class Post(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'))
 
-    user_post = relationship("User", back_populates = "post_user")
-    media_post = relationship("Media", back_populates = "post_media")
-    comment_post = relationship("Comment", back_populates = "post_comment")
+    user = relationship("User", back_populates = "post")
+    media = relationship("Media", back_populates = "post")
+    comment = relationship("Comment", back_populates = "post")
 
 
 class Comment(Base):
@@ -68,8 +68,8 @@ class Comment(Base):
     author_id = Column(Integer, ForeignKey('user.id'))
     post_id = Column(Integer, ForeignKey('post.id'))
 
-    user_comment = relationship("User", back_populates = "comment_user")
-    post_comment = relationship("Post", back_populates = "comment_post")
+    user = relationship("User", back_populates = "comment")
+    post = relationship("Post", back_populates = "comment")
 
 
 ## Draw from SQLAlchemy base
