@@ -16,22 +16,21 @@ class Follower(Base):
     user_from_id = Column(Integer, ForeignKey('user.id'))
     user_to_id = Column(Integer, ForeignKey('user.id'))
 
-    user = relationship("User", back_populates = "follower")
+    user_follower = relationship("User", back_populates = "follower_user")
 
 class User(Base):
     __tablename__ = 'user'
     # Here we define columns for the table address.
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    username = Column(String)
-    firstname = Column(String)
-    lastname = Column(String)
-    email = Column(String)
+    username = Column(String, nullable=False, unique=True, index=True)
+    firstname = Column(String, nullable=False)
+    lastname = Column(String, nullable=True)
+    email = Column(String, nullable=False, unique=True)
 
-    follower = relationship("Follower", back_populates = "user")
-    post = relationship("Post", back_populates = "user")
-    comment = relationship("Comment", back_populates = "user")
-
+    follower_user = relationship("Follower", back_populates = "user_follower")
+    post_user = relationship("Post", back_populates = "user_post")
+    comment_user = relationship("Comment", back_populates = "user_comment")
 
 
     def to_dict(self):
@@ -42,11 +41,11 @@ class Media(Base):
     # Here we define columns for the table person
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    type_media = Column(Enum)
-    url = Column(String)
+    type_media = Column(Enum, nullable=False)
+    url = Column(String, nullable=False)
     post_id = Column(Integer, ForeignKey('post.id'))
 
-    post = relationship("Post", back_populates = "media")
+    post_media = relationship("Post", back_populates = "media_post")
 
 class Post(Base):
     __tablename__ = 'post'
@@ -55,9 +54,9 @@ class Post(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'))
 
-    user = relationship("User", back_populates = "post")
-    media = relationship("Media", back_populates = "post")
-    comment = relationship("Comment", back_populates = "post")
+    user_post = relationship("User", back_populates = "post_user")
+    media_post = relationship("Media", back_populates = "post_media")
+    comment_post = relationship("Comment", back_populates = "post_comment")
 
 
 class Comment(Base):
@@ -65,12 +64,12 @@ class Comment(Base):
     # Here we define columns for the table person
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    comment_text = Column(String)
+    comment_text = Column(String, nullable=False)
     author_id = Column(Integer, ForeignKey('user.id'))
     post_id = Column(Integer, ForeignKey('post.id'))
 
-    user = relationship("User", back_populates = "comment")
-    post = relationship("Post", back_populates = "comment")
+    user_comment = relationship("User", back_populates = "comment_user")
+    post_comment = relationship("Post", back_populates = "comment_post")
 
 
 ## Draw from SQLAlchemy base
